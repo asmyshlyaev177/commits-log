@@ -36,7 +36,7 @@ export const DateLabelClient = ({ date }: { date: string }) => {
   const result = formatDate(date, isClient ? now : new Date());
   // stop timer after there is no updates
   React.useEffect(() => {
-    if (result.includes('/')) {
+    if (!result.match(' (ago|now)$')) {
       stop();
     }
   }, [result, stop]);

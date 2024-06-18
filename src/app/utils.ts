@@ -4,13 +4,15 @@ export const formatDate = (date: Date | string, now: Date | string) => {
 
   const diff = (_now - d) / 1000;
 
-  if (diff < 60) {
+  const minutes = Math.floor(diff / 60);
+
+  if (minutes < 1) {
     return 'just now';
   }
 
-  if (diff <= 60 * 5) {
-    return `${Math.floor(diff / 60)} minutes ago`;
+  if (minutes <= 5) {
+    return `${Math.floor(diff / 60)} minute${minutes > 1 ? 's' : ''} ago`;
   }
 
-  return new Intl.DateTimeFormat('en-GB').format(d);
+  return new Intl.DateTimeFormat().format(d);
 };
