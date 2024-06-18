@@ -29,15 +29,12 @@ const useIsClient = () => {
   return isClient;
 };
 
-const FIVE_MINUTES = 5 * 60 * 1000 + 50;
-
 export const DateLabelClient = ({ date }: { date: string }) => {
   const { date: now, stop } = useDateInterval();
   const isClient = useIsClient();
   const _now = isClient ? now : undefined;
   const result = formatDate(date, _now);
-  const shouldStop =
-    !!_now && now.valueOf() - new Date(date).valueOf() > FIVE_MINUTES;
+  const shouldStop = isClient && !result.match(/\s(now|ago)$/);
 
   React.useEffect(() => {
     if (shouldStop) {
