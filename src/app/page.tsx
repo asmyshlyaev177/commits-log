@@ -1,6 +1,7 @@
 import Link from 'next/link';
-
+import React from 'react';
 import { fetchCommits, type Commit } from './fetchCommits';
+import { DateLabelClient } from './formatDate';
 
 export default async function Home() {
   const resp = await fetchCommits();
@@ -32,9 +33,10 @@ const Commit = ({ commit }: { commit: Commit }) => {
   // but for this example not relevant
   const {
     sha,
-    commit: { author, message },
-    // html_url,
+    commit: { author, committer, message },
   } = commit;
+
+  const date = (author || committer)?.date || '';
 
   return (
     <div
@@ -52,7 +54,7 @@ const Commit = ({ commit }: { commit: Commit }) => {
       </div>
       <div className="author self-end text-sm">{author?.name}</div>
       <div className="date justify-self-end self-end font-mono light:text-gray-600 dark:text-slate-300">
-        {author?.date}
+        <DateLabelClient date={date} />
       </div>
     </div>
   );
