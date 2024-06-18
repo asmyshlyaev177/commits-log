@@ -1,6 +1,9 @@
 export const formatDate = (date: Date | string, now?: Date) => {
   const d = new Date(date).valueOf();
-  const justDate = new Intl.DateTimeFormat().format(d);
+  const justDate = new Intl.DateTimeFormat('en-GB', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+  }).format(d);
   if (!now) {
     return justDate;
   }

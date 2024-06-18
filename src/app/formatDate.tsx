@@ -29,7 +29,7 @@ const useIsClient = () => {
   return isClient;
 };
 
-const FIVE_MINUTES = 5 * 60 * 1000;
+const FIVE_MINUTES = 5 * 60 * 1000 + 50;
 
 export const DateLabelClient = ({ date }: { date: string }) => {
   const { date: now, stop } = useDateInterval();
