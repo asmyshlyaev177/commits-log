@@ -40,7 +40,6 @@ export const DateLabelClient = ({ date }: { date: string }) => {
       stop();
     }
   }, [result, stop]);
-  console.log({ result });
 
   return result;
 };

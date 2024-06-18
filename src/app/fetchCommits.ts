@@ -10,15 +10,20 @@ export type Commit = Awaited<ReturnType<typeof fetchCommits>>[number];
 
 const owner = packageJson.author.name;
 const repo = packageJson.name;
-const headers = {
+const headers: { 'X-GitHub-Api-Version': string; 'cache-control'?: string } = {
   'X-GitHub-Api-Version': '2022-11-28',
 };
 
-export const fetchCommits = async () => {
+export const fetchCommits = async (noCache = false) => {
+  const _headers = { ...headers };
+  if (noCache) {
+    _headers['cache-control'] = 'no-cache';
+  }
+
   const resp = await octokit.request('GET /repos/{owner}/{repo}/commits', {
     owner,
     repo,
-    headers,
+    headers: _headers,
   });
 
   if (resp.status !== 200) {
