@@ -2,6 +2,10 @@
   "name": "commits-log",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "asmyshlyaev177",
+    "email": "asmyshlyaev177@gmail.com"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -16,6 +20,7 @@
   "dependencies": {
     "husky": "^9.0.11",
     "next": "14.2.4",
+    "octokit": "^4.0.2",
     "react": "^18",
     "react-dom": "^18"
   },

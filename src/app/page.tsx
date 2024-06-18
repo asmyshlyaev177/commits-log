@@ -1,42 +1,59 @@
-import Image from 'next/image';
+import { Octokit } from 'octokit';
 
-export default function Home() {
+import packageJson from '@/../package.json';
+
+const token = process.env.GITHUB_TOKEN;
+
+const octokit = new Octokit({ auth: token });
+
+export default async function Home() {
+  const resp = await fetchCommits();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p
-          className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300
-            bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl
-            dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static
-            lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30"
-        >
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div
-          className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t
-            from-white via-white dark:from-black dark:via-black lg:static lg:size-auto
-            lg:bg-none"
-        >
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto
-              lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <main className="flex min-h-screen items-centerp-24">
+      {resp.map(com => (
+        <Commit commit={com} key={com.sha} />
+      ))}
     </main>
   );
 }
+
+const Commit = ({ commit }: { commit: Commit }) => {
+  // author is who wrote the code
+  // committer is person who applied commit, could be different
+  // but for this example not relevant
+  const {
+    sha,
+    commit: { author, message, comment_count },
+    html_url,
+  } = commit;
+
+  return (
+    <pre>
+      {JSON.stringify(
+        { sha, author, message, comment_count, html_url },
+        null,
+        2,
+      )}
+    </pre>
+  );
+};
+
+type Commit = Awaited<ReturnType<typeof fetchCommits>>[number];
+
+// TODO: to separate file
+const fetchCommits = async () => {
+  const resp = await octokit.request('GET /repos/{owner}/{repo}/commits', {
+    owner: packageJson.author.name,
+    repo: packageJson.name,
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+  });
+
+  if (resp.status !== 200) {
+    return [];
+  }
+
+  return resp.data;
+};
