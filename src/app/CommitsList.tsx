@@ -14,7 +14,7 @@ export const CommitsList = ({ data }: { data: Commit[] }) => {
       <h1 className="w-full m-4 text-center text-xl">
         There are{' '}
         <span className="font-bold">
-          {list.length} commit{list.length > 1 ? 's' : ''}
+          {list.length} commit{list.length === 1 ? '' : 's'}
         </span>
       </h1>
 
