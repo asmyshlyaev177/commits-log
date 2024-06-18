@@ -32,14 +32,18 @@ const useIsClient = () => {
 export const DateLabelClient = ({ date }: { date: string }) => {
   const { date: now, stop } = useDateInterval();
   const isClient = useIsClient();
+  const _now = isClient ? now : undefined;
+  const result = formatDate(date, _now);
+  const shouldStop =
+    !!_now && new Date(date).valueOf() - now.valueOf() > 5 * 60 * 1000;
 
-  const result = formatDate(date, isClient ? now : '');
-  // stop timer after there is no updates
+  console.log('STOP', { shouldStop, result });
+
   React.useEffect(() => {
-    if (!result.match(' (ago|now)$')) {
+    if (shouldStop) {
       stop();
     }
-  }, [result, stop]);
+  }, [shouldStop, stop]);
 
   return result;
 };
