@@ -6,7 +6,7 @@ export default async function Home() {
   const resp = await fetchCommits();
 
   return (
-    <main className="min-h-screen md:p-16 sm:p-4">
+    <main>
       <CommitsList data={resp} />
     </main>
   );
