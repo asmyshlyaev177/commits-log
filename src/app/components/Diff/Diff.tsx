@@ -5,7 +5,7 @@ export const Code = ({ value }: { value: string }) => {
 
   return (
     <pre className="whitespace-pre-wrap break-words text-justify">
-      <code>
+      <code className="text-xs md:text-base">
         {splitted.map((text, ind) => (
           <Line key={ind} text={text} />
         ))}

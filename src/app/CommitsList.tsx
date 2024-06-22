@@ -25,7 +25,7 @@ export const CommitsList = ({ data }: { data: Commit[] }) => {
           setPending={setPending}
           disabled={pending}
         />
-        <div className="w-full flex flex-wrap gap-4 p-1 justify-center max-w-[850px]">
+        <div className="w-full flex flex-wrap gap-4 justify-center max-w-[850px]">
           {!!pending ? (
             <Loader />
           ) : (
