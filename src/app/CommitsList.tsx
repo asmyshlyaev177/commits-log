@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { RefreshButton } from './RefreshButton';
 import { DateLabelClient } from './formatDate';
 import { type Commit } from './fetchCommits';
+import { Card } from './components/Card';
 
 export const CommitsList = ({ data }: { data: Commit[] }) => {
   const [list, setList] = React.useState(data);
@@ -44,9 +45,6 @@ export const CommitsList = ({ data }: { data: Commit[] }) => {
   );
 };
 
-const cardClasses = `grid md:grid-rows-2 md:grid-cols-2 sm:grid-cols-1 sm:grid-rows-auto
-        md:gap-2 sm:gap-y-4 sm:gap-x-2 py-4 sm:px-2 md:px-3  min-h-32 bg-white
-        border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700`;
 const Commit = ({ commit }: { commit: Commit }) => {
   // author is who wrote the code
   // committer is person who applied commit, could be different
@@ -59,8 +57,9 @@ const Commit = ({ commit }: { commit: Commit }) => {
   const date = (author || committer)?.date || '';
 
   return (
-    <div
-      className={`wrapper ${cardClasses} hover:bg-gray-100 dark:hover:bg-gray-700`}
+    <Card
+      className={`wrapper md:grid-rows-2 md:grid-cols-2 sm:grid-cols-1 sm:grid-rows-auto
+        hover:bg-gray-100 dark:hover:bg-gray-700`}
     >
       <div className="message text-wrap mr-6">{message}</div>
       <div
@@ -73,7 +72,7 @@ const Commit = ({ commit }: { commit: Commit }) => {
       <div className="date justify-self-end self-end font-mono light:text-gray-600 dark:text-slate-300">
         <DateLabelClient date={date} />
       </div>
-    </div>
+    </Card>
   );
 };
 
@@ -85,7 +84,7 @@ const Loader = () => {
 
 const Skeleton = () => {
   return (
-    <div role="status" className={`animate-pulse w-full ${cardClasses}`}>
+    <Card role="status" className="animate-pulse w-full">
       <div className="message h-2 min-w-[50px] bg-gray-200 rounded-full dark:bg-gray-700 max-w-[200px]"></div>
       <div
         className="sha h-2 min-w-[330px] bg-gray-200 rounded-full dark:bg-gray-700 justify-self-end
@@ -100,6 +99,6 @@ const Skeleton = () => {
           self-end max-w-[150px]"
       ></div>
       <span className="sr-only">Loading...</span>
-    </div>
+    </Card>
   );
 };

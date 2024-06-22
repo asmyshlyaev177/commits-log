@@ -37,7 +37,7 @@ export const fetchCommits = async (noCache = false) => {
   });
 
   if (resp.status !== 200) {
-    return [];
+    return [] as typeof resp.data;
   }
 
   return resp.data;
@@ -55,7 +55,7 @@ export const getCommit = async (commit: string) => {
   );
 
   if (resp.status !== 200) {
-    return {};
+    return {} as typeof resp.data;
   }
 
   return resp.data;
