@@ -84,19 +84,26 @@ const Loader = () => {
 
 const Skeleton = () => {
   return (
-    <Card role="status" className="animate-pulse w-full">
-      <div className="message h-2 min-w-[50px] bg-gray-200 rounded-full dark:bg-gray-700 max-w-[200px]"></div>
+    <Card
+      role="status"
+      className="animate-pulse w-full p-6 md:grid-rows-2 md:grid-cols-2 sm:grid-cols-1
+        sm:grid-rows-auto"
+    >
       <div
-        className="sha h-2 min-w-[330px] bg-gray-200 rounded-full dark:bg-gray-700 justify-self-end
+        className="message mt-2 h-2 min-w-[50px] bg-gray-200 rounded-full dark:bg-gray-700
           max-w-[200px]"
       ></div>
       <div
-        className="author h-2 min-w-[50px] bg-gray-200 rounded-full dark:bg-gray-700 self-end
+        className="sha h-2 mt-2 min-w-[330px] bg-gray-200 rounded-full dark:bg-gray-700
+          justify-self-end self-start max-w-[200px]"
+      ></div>
+      <div
+        className="author mb-1 h-2 min-w-[50px] bg-gray-200 rounded-full dark:bg-gray-700 self-end
           max-w-[100px]"
       ></div>
       <div
-        className="date h-2 min-w-[90px] bg-gray-200 rounded-full dark:bg-gray-700 justify-self-end
-          self-end max-w-[150px]"
+        className="date mb-1 h-2 min-w-[90px] bg-gray-200 rounded-full dark:bg-gray-700
+          justify-self-end self-end max-w-[150px]"
       ></div>
       <span className="sr-only">Loading...</span>
     </Card>
