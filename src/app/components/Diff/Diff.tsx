@@ -1,5 +1,3 @@
-import styles from './styles.module.css';
-
 export const Code = ({ value }: { value: string }) => {
   const splitted = value.split('\n');
 
@@ -22,7 +20,9 @@ const Line = ({ text }: { text: String }) => {
     <div
       className={`${isAddition ? 'bg-green-400/20' : ''} ${isRemoval ? 'bg-red-400/20' : ''} `}
     >
-      <span className={`opacity-40 ${!text.match(/^\@@/) ? styles.dot : ''}`} />
+      <span
+        className={`opacity-40 ${!text.match(/^\@@/) ? 'before:content-["."]' : ''} mr-1`}
+      />
       <span
         className={`opacity-50 ${isAddition ? 'before:content-["+"]' : ''}`}
       />
