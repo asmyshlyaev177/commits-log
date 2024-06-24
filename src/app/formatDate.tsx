@@ -2,21 +2,38 @@
 import React from 'react';
 import { formatDate } from './utils';
 
-export const useDateInterval = () => {
+export const useDateInterval = (restartKey: unknown) => {
+  const [initialDate, setInitialDate] = React.useState(new Date());
   const [date, setDate] = React.useState(new Date());
 
   const timer = React.useRef(0 as unknown as NodeJS.Timeout);
-
-  React.useEffect(() => {
+  const start = React.useCallback(() => {
+    const d = new Date();
+    setInitialDate(d);
+    setDate(d);
     timer.current = setInterval(() => {
       setDate(new Date());
-    }, 28 * 1000);
-
-    return () => clearInterval(timer.current);
+    }, 29 * 1000);
+  }, []);
+  const stop = React.useCallback(() => {
+    clearInterval(timer.current);
   }, []);
 
-  const stop = React.useCallback(() => clearInterval(timer.current), []);
-  return { date, stop };
+  React.useEffect(() => {
+    start();
+
+    return stop;
+  }, [restartKey]);
+
+  React.useEffect(() => {
+    const diff = (date.getTime() - initialDate.getTime()) / 1000;
+
+    if (diff > 6 * 60) {
+      stop();
+    }
+  }, [date, initialDate]);
+
+  return date;
 };
 
 const useIsClient = () => {
@@ -29,24 +46,8 @@ const useIsClient = () => {
   return isClient;
 };
 
-export const DateLabelClient = ({ date }: { date: string }) => {
-  const { date: now, stop } = useDateInterval();
+export const DateLabelClient = ({ date, now }: { date: string; now: Date }) => {
   const isClient = useIsClient();
-  const _now = isClient ? now : undefined;
-  const [result, setResult] = React.useState(() => formatDate(date));
-  const shouldStop = isClient && !result[1];
 
-  React.useEffect(() => {
-    if (shouldStop) {
-      stop();
-    }
-  }, [shouldStop, stop]);
-
-  React.useEffect(() => {
-    if (isClient) {
-      setResult(formatDate(date, _now));
-    }
-  }, [isClient, _now, date]);
-
-  return result[0];
+  return formatDate(date, isClient ? now : undefined);
 };

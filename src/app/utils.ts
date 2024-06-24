@@ -1,7 +1,4 @@
-export const formatDate = (
-  date: Date | string,
-  now?: Date,
-): [dateStr: string, isRecent: boolean] => {
+export const formatDate = (date: Date | string, now?: Date) => {
   const d = new Date(date).valueOf();
   const justDate = new Intl.DateTimeFormat('en-GB', {
     dateStyle: 'short',
@@ -10,7 +7,7 @@ export const formatDate = (
   }).format(d);
 
   if (!now) {
-    return [justDate, true];
+    return justDate;
   }
   const _now = new Date(now).valueOf();
 
@@ -19,15 +16,12 @@ export const formatDate = (
   const minutes = Math.floor(diff / 60);
 
   if (minutes < 1) {
-    return ['just now', true];
+    return 'just now';
   }
 
   if (minutes <= 5) {
-    return [
-      `${Math.floor(diff / 60)} minute${minutes === 1 ? '' : 's'} ago`,
-      true,
-    ];
+    return `${Math.floor(diff / 60)} minute${minutes === 1 ? '' : 's'} ago`;
   }
 
-  return [justDate, false];
+  return justDate;
 };

@@ -2,13 +2,15 @@
 import React from 'react';
 import Link from 'next/link';
 import { RefreshButton } from './RefreshButton';
-import { DateLabelClient } from './formatDate';
+import { DateLabelClient, useDateInterval } from './formatDate';
 import { type Commit } from './fetchCommits';
 import { Card } from './components/Card';
 
 export const CommitsList = ({ data }: { data: Commit[] }) => {
   const [list, setList] = React.useState(data);
   const [pending, setPending] = React.useState(false);
+
+  const date = useDateInterval(list.slice(-1)?.[0]?.sha || '');
 
   return (
     <div className="wrapper flex flex-wrap">
@@ -26,24 +28,28 @@ export const CommitsList = ({ data }: { data: Commit[] }) => {
           disabled={pending}
         />
         <div className="w-full flex flex-wrap gap-4 justify-center max-w-[850px]">
-          {!!pending ? (
-            <Loader />
-          ) : (
-            list.map(com => (
-              <Link
-                href={`/commit/${com.sha}`}
-                key={com.sha}
-                className="w-full"
-              >
-                <Commit commit={com} />
-              </Link>
-            ))
-          )}
+          <DateContext.Provider value={date}>
+            {!!pending ? (
+              <Loader />
+            ) : (
+              list.map(com => (
+                <Link
+                  href={`/commit/${com.sha}`}
+                  key={com.sha}
+                  className="w-full"
+                >
+                  <Commit commit={com} />
+                </Link>
+              ))
+            )}
+          </DateContext.Provider>
         </div>
       </div>
     </div>
   );
 };
+
+export const DateContext = React.createContext(new Date());
 
 const Commit = ({ commit }: { commit: Commit }) => {
   // author is who wrote the code
@@ -55,6 +61,8 @@ const Commit = ({ commit }: { commit: Commit }) => {
   } = commit;
 
   const date = (author || committer)?.date || '';
+
+  const now = React.useContext(DateContext);
 
   return (
     <Card
@@ -70,7 +78,7 @@ const Commit = ({ commit }: { commit: Commit }) => {
       </div>
       <div className="author self-end text-sm">{author?.name}</div>
       <div className="date justify-self-end self-end font-mono light:text-gray-600 dark:text-slate-300">
-        <DateLabelClient date={date} />
+        <DateLabelClient date={date} now={now} />
       </div>
     </Card>
   );
