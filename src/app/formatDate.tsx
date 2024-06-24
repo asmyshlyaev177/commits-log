@@ -33,7 +33,7 @@ export const DateLabelClient = ({ date }: { date: string }) => {
   const { date: now, stop } = useDateInterval();
   const isClient = useIsClient();
   const _now = isClient ? now : undefined;
-  const result = formatDate(date, _now);
+  const [result, setResult] = React.useState(() => formatDate(date));
   const shouldStop = isClient && !result.match(/\s(now|ago)$/);
 
   React.useEffect(() => {
@@ -41,6 +41,12 @@ export const DateLabelClient = ({ date }: { date: string }) => {
       stop();
     }
   }, [shouldStop, stop]);
+
+  React.useEffect(() => {
+    if (isClient) {
+      setResult(formatDate(date, _now));
+    }
+  }, [isClient, _now, date]);
 
   return result;
 };

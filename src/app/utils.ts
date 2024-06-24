@@ -3,6 +3,7 @@ export const formatDate = (date: Date | string, now?: Date) => {
   const justDate = new Intl.DateTimeFormat('en-GB', {
     dateStyle: 'short',
     timeStyle: 'short',
+    timeZone: now ? undefined : 'Europe/Berlin',
   }).format(d);
   if (!now) {
     return justDate;
